@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Pagination, Input, Select, Button , Row, Col } from 'antd';
 import UserCard from './UserCard';
@@ -19,8 +20,6 @@ function UserList({ users }) {
   const [filterAvailability, setFilterAvailability] = useState('');
 
   const totalUsers = users.meta.total;
-  const startIndex = (currentPage - 1) * pageSize;
-  const visibleUsers = users.data.slice(startIndex, startIndex + pageSize);
 
   const allDomain = [...new Set(users.data.map(domain => domain.domain))];
 
@@ -33,20 +32,14 @@ function UserList({ users }) {
   };
 
   useEffect(()=>{
-      const timer = setTimeout(() => {
-        dispatch(setPagination({
-            page:currentPage,
-            searchTerm:searchQuery,
-            domain:filterDomain,
-            gender:filterGender,
-            available:filterAvailability
-          }
-            ))
-      }, 500);
-  
-      return () => {
-        clearTimeout(timer);
-      };
+    dispatch(setPagination({
+      page:currentPage,
+      searchTerm:searchQuery,
+      domain:filterDomain,
+      gender:filterGender,
+      available:filterAvailability
+    }
+      ))
   },[currentPage,searchQuery,filterDomain,filterGender,filterAvailability])
 
   const handleFilterChange = (key, value) => {
@@ -87,7 +80,7 @@ function UserList({ users }) {
       </div>
 
       <Row gap="middle" vertical>
-        {visibleUsers.map((user) => (
+        {users.data.map((user) => (
           <Col span={6} key={user._id}>
           <UserCard  user={user} />
           </Col>

@@ -8,7 +8,7 @@ export const usersApi = createApi({
       {
         query: ({ pagination }) => {
             const {searchTerm,domain,gender,available,page} = pagination
-            const queryParams =`searchTerm=${searchTerm&&searchTerm}${domain&&`&domain=${domain}`}${gender&&`&gender=${gender}`}${available&&`&available=${available}`}${page&&`&page=${page}`}
+            const queryParams =`searchTerm=${searchTerm?searchTerm:""}${domain&&`&domain=${domain}`}${gender&&`&gender=${gender}`}${available&&`&available=${available}`}${page&&`&page=${page}`}
             `
             return {
               url: `/users/?${queryParams}`
