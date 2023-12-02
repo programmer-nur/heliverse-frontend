@@ -1,6 +1,8 @@
+import UsersPage from "./components/UsersPage"
+
 const App = () => {
   return (
-    <div>App</div>
+    <div><UsersPage /></div>
   )
 }
 export default App
