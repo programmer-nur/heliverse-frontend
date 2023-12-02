@@ -1,4 +1,3 @@
-
 import React from 'react';
 import UserList from './UserList';
 import { useGetUsersQuery } from '../redux/api/usersApi';
