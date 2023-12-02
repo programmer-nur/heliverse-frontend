@@ -6,9 +6,14 @@ export const usersApi = createApi({
   endpoints: (builder) => ({
     getUsers: builder.query(
       {
-        query: () => ({
-          url:'/users'
-        }),
+        query: ({ pagination }) => {
+            const {searchTerm,domain,gender,available,page} = pagination
+            const queryParams =`searchTerm=${searchTerm&&searchTerm}${domain&&`&domain=${domain}`}${gender&&`&gender=${gender}`}${available&&`&available=${available}`}${page&&`&page=${page}`}
+            `
+            return {
+              url: `/users/?${queryParams}`
+            }
+        },
       }),
     createUser: builder.mutation({
       query: (users) => ({
