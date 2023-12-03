@@ -126,9 +126,9 @@ function UserList({ users }) {
 
       <div>
         <div className="container">
-          {users.data.map((user) => (
+          {users.data.length > 0 ? users.data.map((user) => (
             <UserCard key={user.id} user={user} />
-          ))}
+          )) : <p>Data not found</p>}
         </div>
       </div>
 
