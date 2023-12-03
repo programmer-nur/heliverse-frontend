@@ -1,56 +1,71 @@
-
-import React, { useEffect, useState } from 'react';
-import { Pagination, Input, Select, Button , Row, Col } from 'antd';
-import UserCard from './UserCard';
-import { useDispatch } from 'react-redux';
-import { setPagination } from '../redux/features/usersSlice';
+import React, { useEffect, useState } from "react";
+import { Pagination, Input, Select } from "antd";
+import UserCard from "./UserCard";
+import { useDispatch } from "react-redux";
+import { setPagination } from "../redux/features/usersSlice";
 
 const { Search } = Input;
 const { Option } = Select;
 
 function UserList({ users }) {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-  
-  const [currentPage, setCurrentPage] = useState(users.meta.page);
-  const [pageSize, setPageSize] = useState(users.meta.limit);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterDomain, setFilterDomain] = useState('');
-  const [filterGender, setFilterGender] = useState('');
-  const [filterAvailability, setFilterAvailability] = useState('');
+  const [currentPage, setCurrentPage] = useState(users?.meta?.page);
+  const [pageSize, setPageSize] = useState(users?.meta?.limit);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterDomain, setFilterDomain] = useState("");
+  const [filterGender, setFilterGender] = useState("");
+  const [filterAvailability, setFilterAvailability] = useState("");
 
+  console.log(searchQuery,filterAvailability,filterDomain,filterGender)
   const totalUsers = users.meta.total;
-
-  const allDomain = [...new Set(users.data.map(domain => domain.domain))];
+  const allDomain = [...new Set(users.data.map((domain) => domain.domain))];
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    setFilterDomain("");
+    setFilterAvailability("");
+    setFilterGender("");
+    setSearchQuery("");
   };
 
   const handleSearch = (value) => {
     setSearchQuery(value);
   };
 
-  useEffect(()=>{
-    dispatch(setPagination({
-      page:currentPage,
-      searchTerm:searchQuery,
-      domain:filterDomain,
-      gender:filterGender,
-      available:filterAvailability
-    }
-      ))
-  },[currentPage,searchQuery,filterDomain,filterGender,filterAvailability])
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatch(
+        setPagination({
+          page: currentPage,
+          searchTerm: searchQuery,
+          domain: filterDomain,
+          gender: filterGender,
+          available: filterAvailability,
+        })
+      );
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [
+    currentPage,
+    searchQuery,
+    filterDomain,
+    filterGender,
+    filterAvailability,
+  ]);
 
   const handleFilterChange = (key, value) => {
     switch (key) {
-      case 'domain':
+      case "domain":
         setFilterDomain(value);
         break;
-      case 'gender':
+      case "gender":
         setFilterGender(value);
         break;
-      case 'availability':
+      case "availability":
         setFilterAvailability(value);
         break;
       default:
@@ -60,34 +75,74 @@ function UserList({ users }) {
 
   return (
     <div>
-      <div style={{marginBottom:"20px"}}>
-        <Search placeholder="Search by name" onSearch={handleSearch} style={{ width: 200, marginRight: 16 }} />
-        <Select placeholder="Filter by Domain" onChange={(value) => handleFilterChange('domain', value)} style={{ width: 120, marginRight: 16 }}>
-        {
-          allDomain.map(domain=><Option  value={domain}>{domain}</Option>)
-        }
+      <div
+        style={{
+          margin: "20px 0",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "10px",
+          alignItems: "center",
+        }}
+      >
+        <Search
+          placeholder="Search By Name"
+          allowClear
+          enterButton="Search"
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300, marginRight: 16 }}
+        />
+        <Select
+          placeholder="Filter by Domain"
+          onChange={(value) => handleFilterChange("domain", value)}
+          size="large"
+          style={{ width: 150, marginRight: 16 }}
+        >
+          {allDomain.map((domain) => (
+            <Option value={domain}>{domain}</Option>
+          ))}
         </Select>
-        <Select placeholder="Filter by Gender" onChange={(value) => handleFilterChange('gender', value)} style={{ width: 120, marginRight: 16 }}>
+        <Select
+          placeholder="Filter by Gender"
+          onChange={(value) => handleFilterChange("gender", value)}
+          size="large"
+          style={{ width: 150, marginRight: 16 }}
+        >
           <Option value="Male">Male</Option>
           <Option value="Female">Female</Option>
           <Option value="Agender">Agender</Option>
         </Select>
-        <Select placeholder="Filter by Availability" onChange={(value) => handleFilterChange('availability', value)} style={{ width: 120, marginRight: 16 }}>
+        <Select
+          placeholder="Filter by Availability"
+          onChange={(value) => handleFilterChange("availability", value)}
+          size="large"
+          style={{ width: 150, marginRight: 16 }}
+        >
           <Option value="true">Available</Option>
           <Option value="false">Not Available</Option>
         </Select>
-        <Button type="primary">Create Team</Button>
       </div>
 
-      <Row gap="middle" vertical>
-        {users.data.map((user) => (
-          <Col span={6} key={user._id}>
-          <UserCard  user={user} />
-          </Col>
-        ))}
-      </Row>
+      <div>
+        <div className="container">
+          {users.data.map((user) => (
+            <UserCard key={user.id} user={user} />
+          ))}
+        </div>
+      </div>
 
-      <Pagination current={currentPage} pageSize={pageSize} total={totalUsers} onChange={handlePageChange} />
+      <Pagination
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItem: "center",
+        }}
+        current={currentPage}
+        pageSize={pageSize}
+        total={totalUsers}
+        onChange={handlePageChange}
+      />
     </div>
   );
 }

@@ -2,16 +2,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const usersApi = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4000/api/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER }),
   endpoints: (builder) => ({
     getUsers: builder.query(
       {
         query: ({ pagination }) => {
             const {searchTerm,domain,gender,available,page} = pagination
-            const queryParams =`searchTerm=${searchTerm?searchTerm:""}${domain&&`&domain=${domain}`}${gender&&`&gender=${gender}`}${available&&`&available=${available}`}${page&&`&page=${page}`}
+            const queryParams =`searchTerm=${searchTerm&&searchTerm}${domain&&`&domain=${domain}`}${gender&&`&gender=${gender}`}${available&&`&available=${available}`}
             `
             return {
-              url: `/users/?${queryParams}`
+              url: searchTerm || domain || gender || available?`/users/?${queryParams}`:`/users/?page=${page}`
             }
         },
       }),
