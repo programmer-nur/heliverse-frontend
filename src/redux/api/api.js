@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export const usersApi = createApi({
+export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER }),
   tagTypes:['team'],
@@ -50,4 +50,4 @@ export const usersApi = createApi({
   }),
 });
 
-export const { useGetUsersQuery,useGetTeamsQuery,useCreateTeamMutation,useGetSingleTeamQuery } = usersApi;
+export const { useGetUsersQuery,useGetTeamsQuery,useCreateTeamMutation,useGetSingleTeamQuery } = api;

@@ -1,6 +1,6 @@
 import { Avatar, Card, List, Modal } from "antd";
 import { useState } from "react";
-import { useGetSingleTeamQuery } from "../redux/api/usersApi";
+import { useGetSingleTeamQuery } from "../redux/api/api";
 
 const TeamCard = ({ team }) => {
     const {data:singleTeam} = useGetSingleTeamQuery(team._id)

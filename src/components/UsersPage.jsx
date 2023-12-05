@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCreateTeamMutation, useGetTeamsQuery, useGetUsersQuery } from "../redux/api/usersApi";
+import { useCreateTeamMutation, useGetTeamsQuery, useGetUsersQuery } from "../redux/api/api";
 import { useSelector } from "react-redux";
 import UserList from "./UserList";
 import { Button, Spin } from "antd";
