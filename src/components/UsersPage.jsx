@@ -6,6 +6,7 @@ import { Button, Spin } from "antd";
 import TeamCreate from "./TeamCreate";
 import { PlusOutlined } from "@ant-design/icons";
 import TeamList from "./TeamList";
+
 function UsersPage() {
   const [isTeamModalVisible, setTeamModalVisible] = useState(false);
   const { pagination } = useSelector((state) => state.users);
@@ -24,6 +25,7 @@ function UsersPage() {
   const handleCreateTeam = async (members) => {
     try {
       const res = await createTeam(members ).unwrap();
+      console.log(res,'res')
       if (res._id) {
         message.success(" Create team in successfully");
       }

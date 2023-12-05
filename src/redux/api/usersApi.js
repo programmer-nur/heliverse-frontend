@@ -23,8 +23,15 @@ export const usersApi = createApi({
               url: '/team'
             }
         },
-        providesTags:'team'
+        providesTags:['team']
       }),
+    getSingleTeam:builder.query({
+      query: (id) => {
+        return {
+          url: `/team/${id}`
+        }
+       },
+    }),
     createUser: builder.mutation({
       query: (users) => ({
         url: '/user',
@@ -38,9 +45,9 @@ export const usersApi = createApi({
         method: 'POST',
         body: users ,
       }),
-      invalidatesTags:'team'
+      invalidatesTags:['team']
     }),
   }),
 });
 
-export const { useGetUsersQuery,useGetTeamsQuery,useCreateTeamMutation } = usersApi;
+export const { useGetUsersQuery,useGetTeamsQuery,useCreateTeamMutation,useGetSingleTeamQuery } = usersApi;

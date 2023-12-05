@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Pagination, Input, Select } from "antd";
+import { Pagination, Input, Select, Button } from "antd";
+import { RedoOutlined } from "@ant-design/icons";
 import UserCard from "./UserCard";
 import { useDispatch } from "react-redux";
 import { setPagination } from "../redux/features/usersSlice";
@@ -7,26 +8,28 @@ import { setPagination } from "../redux/features/usersSlice";
 const { Search } = Input;
 const { Option } = Select;
 
-function UserList({ users ,handleOpenTeamModal}) {
+function UserList({ users }) {
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(users?.meta?.page);
-  const [pageSize, setPageSize] = useState(users?.meta?.limit);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDomain, setFilterDomain] = useState("");
   const [filterGender, setFilterGender] = useState("");
   const [filterAvailability, setFilterAvailability] = useState("");
 
-  console.log(searchQuery,filterAvailability,filterDomain,filterGender)
   const totalUsers = users.meta.total;
   const allDomain = [...new Set(users.data.map((domain) => domain.domain))];
+  const allGender = [...new Set(users.data.map((gender) => gender.gender))];
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handelResetFilter = ()=>{
+    setCurrentPage(1);
     setFilterDomain("");
     setFilterAvailability("");
     setFilterGender("");
     setSearchQuery("");
+  }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleSearch = (value) => {
@@ -109,9 +112,9 @@ function UserList({ users ,handleOpenTeamModal}) {
           size="large"
           style={{ width: 150, marginRight: 16 }}
         >
-          <Option value="Male">Male</Option>
-          <Option value="Female">Female</Option>
-          <Option value="Agender">Agender</Option>
+           {allGender.map((gender) => (
+            <Option value={gender}>{gender}</Option>
+          ))}
         </Select>
         <Select
           placeholder="Filter by Availability"
@@ -122,13 +125,16 @@ function UserList({ users ,handleOpenTeamModal}) {
           <Option value="true">Available</Option>
           <Option value="false">Not Available</Option>
         </Select>
+        <Button size="large" onClick={handelResetFilter} type="primary"><RedoOutlined /> Reset</Button>
       </div>
 
       <div>
         <div className="container">
-          {users.data.length > 0 ? users.data.map((user) => (
-            <UserCard key={user.id} user={user} />
-          )) : <p>Data not found</p>}
+          {users.data.length > 0 ? (
+            users.data.map((user) => <UserCard key={user.id} user={user} />)
+          ) : (
+            <p>Data not found</p>
+          )}
         </div>
       </div>
 
@@ -139,7 +145,7 @@ function UserList({ users ,handleOpenTeamModal}) {
           alignItem: "center",
         }}
         current={currentPage}
-        pageSize={pageSize}
+        pageSize={users?.meta?.limit}
         total={totalUsers}
         onChange={handlePageChange}
       />
