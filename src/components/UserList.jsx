@@ -7,7 +7,7 @@ import { setPagination } from "../redux/features/usersSlice";
 const { Search } = Input;
 const { Option } = Select;
 
-function UserList({ users }) {
+function UserList({ users ,handleOpenTeamModal}) {
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(users?.meta?.page);

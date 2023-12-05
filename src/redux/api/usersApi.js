@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const usersApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER }),
+  tagTypes:['team'],
   endpoints: (builder) => ({
     getUsers: builder.query(
       {
@@ -15,14 +16,31 @@ export const usersApi = createApi({
             }
         },
       }),
+    getTeams: builder.query(
+      {
+        query: () => {
+            return {
+              url: '/team'
+            }
+        },
+        providesTags:'team'
+      }),
     createUser: builder.mutation({
       query: (users) => ({
-        url: '/api/user',
+        url: '/user',
         method: 'POST',
         body: { users },
       }),
     }),
+    createTeam: builder.mutation({
+      query: (users) => ({
+        url: '/team',
+        method: 'POST',
+        body: users ,
+      }),
+      invalidatesTags:'team'
+    }),
   }),
 });
 
-export const { useGetUsersQuery } = usersApi;
+export const { useGetUsersQuery,useGetTeamsQuery,useCreateTeamMutation } = usersApi;
